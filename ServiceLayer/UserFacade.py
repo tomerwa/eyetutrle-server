@@ -1,11 +1,12 @@
 from DomainLayer.LogicRequests import *
 from DomainLayer.Question import *
-
+from API import API
 
 class UserFacade:
 
     def __init__(self):
         self.logic_requests = LogicRequests()
+        self.api = API()
 
     def login(self, user_id):
         if not LogicRequests.valid_id(user_id):
@@ -17,6 +18,12 @@ class UserFacade:
             return 1
         else:
             return 2
+
+    def tts(self, question_id):
+        question = self.logic_requests.questions[question_id]
+        self.api.speak(question.text)
+        for ans in question.possible_answers:
+            self.api.speak(ans)
 
     def start_test(self, number_of_questions=10):
         return self.logic_requests.generate_test(number_of_questions)

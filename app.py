@@ -12,7 +12,11 @@ def hello_world():
 
 # get_questions -> {a: question, b: question, c: question}
 # get_all_questions
-# tts (full question)
+@app.route("/tts")
+def tts():
+    question_id = request.data['question_id']
+    user_facade.tts(question_id)
+
 @app.route("/login")
 def login():
     user_id = request.data['user_id']

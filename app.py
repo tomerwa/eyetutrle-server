@@ -46,8 +46,6 @@ def remove_question():
     return user_facade.remove_question(question_id)
 
 
-@app.route()
-
 
 if __name__ == '__main__':
     app.run()

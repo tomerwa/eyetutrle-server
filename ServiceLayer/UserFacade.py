@@ -1,6 +1,7 @@
 from DomainLayer.LogicRequests import *
 from DomainLayer.Question import *
 
+
 class UserFacade:
 
     def __init__(self):

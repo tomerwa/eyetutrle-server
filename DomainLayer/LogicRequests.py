@@ -9,16 +9,18 @@ class LogicRequests:
         self.users = LogicRequests.read_users()
         self.questions = LogicRequests.read_questions()
 
-    def get_user():
-        pass
+    def get_user(self, user_id):
+        return self.users[user_id]
 
     def add_question(self, question: Question):
         self.questions.append(question)
         LogicRequests.write_questions(self.questions)
+        return True
 
     def remove_question(self, question_id: str):
         del self.questions[question_id]
         LogicRequests.write_questions(self.questions)
+        return True
 
     @staticmethod
     def read_from_json(path: str):
@@ -51,9 +53,20 @@ class LogicRequests:
             }
         LogicRequests.write_to_json(QUESTIONS, data)
 
-
     def valid_id(self, id):
         if len(id) != 9:
             return False
         return sum((int(digit) * (idx % 2 + 1)) % 10 + (int(digit) * (idx % 2 + 1)) / 10 for idx, digit in
                    enumerate(id)) % 10 == 0
+
+    def calculate_grade(self, selected_answers):
+        pass
+
+    def generate_test(self, number_of_questions):
+        pass
+
+    def generate_question_id(self):
+        return len(self.questions)
+
+    def update_grade(self, user_id, grade):
+        pass

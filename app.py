@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import Flask, request
 from ServiceLayer.UserFacade import *
 
@@ -5,17 +6,11 @@ app = Flask(__name__)
 user_facade = UserFacade()
 
 
-@app.route("/login")
-@app.route("/", methods=["GET", "POST"])
-def hello_world():
-    return 'Hello World!'
-
-# get_questions -> {a: question, b: question, c: question}
-# get_all_questions
 @app.route("/tts")
 def tts():
     question_id = request.data['question_id']
     user_facade.tts(question_id)
+
 
 @app.route("/login")
 def login():
@@ -23,10 +18,10 @@ def login():
     return user_facade.login(user_id=user_id)
 
 
-@app.route("end_test")
+@app.route("end_test", methods=['POST'])
 def end_test():
-    user_id = request.data['user_id']
-    selected_answers = request.data['selected_answers']
+    user_id = request.json['user_id']
+    selected_answers = request.json['selected_answers']
     return user_facade.end_test(user_id=user_id, selected_answers=selected_answers)
 
 
@@ -36,19 +31,26 @@ def get_grades():
     return user_facade.watch_grades(user_id=user_id)
 
 
-@app.route("/questions")
+@app.route("/question")
 def add_question():
-    content = request.data['content']
-    possible_answers = request.data['possible_answers']
-    correct_answer = request.data['correct_answer']
+    limit = request.data['limit']
+    if not limit:
+        limit = 200
+    return user_facade.start_test(limit)
+
+
+@app.route("/question", methods=['POST'])
+def add_question():
+    content = request.json['content']
+    possible_answers = request.json['possible_answers']
+    correct_answer = request.json['correct_answer']
     return user_facade.add_question(content=content, possible_answers=possible_answers, correct_answer=correct_answer)
 
 
-@app.route("/questions")
+@app.route("/question", methods=['DELETE'])
 def remove_question():
     question_id = request.data['question_id']
     return user_facade.remove_question(question_id)
-
 
 
 if __name__ == '__main__':

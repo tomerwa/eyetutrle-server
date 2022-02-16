@@ -7,7 +7,6 @@ from DomainLayer.User import *
 QUESTIONS = '..\\questions.json'
 USERS = '..\\users.json'
 
-
 class LogicRequests:
 
     def __init__(self):
@@ -71,7 +70,6 @@ class LogicRequests:
         data = dict()
         for u in users:
             data[u.id] = {
-                'id': u.id,
                 'grades': u.grades
             }
         LogicRequests.write_to_json(USERS, data)
@@ -84,7 +82,11 @@ class LogicRequests:
                    enumerate(user_id)) % 10 == 0
 
     def calculate_grade(self, selected_answers):
-        pass
+        grade = 0
+        for ans in selected_answers:
+            if self.questions[selected_answers.id].correct_answer == ans:
+                grade += 1
+        return grade * 100 / len(grade)
 
     def generate_test(self, number_of_questions):
         return random.sample(self.questions, number_of_questions)
@@ -93,4 +95,4 @@ class LogicRequests:
         return len(self.questions)
 
     def update_grade(self, user_id, grade):
-        pass
+        self.users[user_id].add_grade(grade)

@@ -1,13 +1,24 @@
 import json
-from Question import Questions
+from Question import Question
 
 QUESTIONS = '..\\questions.json'
 
 class LogicRequests:
 
     def __init__(self):
-        self.user = None
+        self.users = LogicRequests.read_users()
         self.questions = LogicRequests.read_questions()
+
+    def get_user():
+        pass
+
+    def add_question(self, question: Question):
+        self.questions.append(question)
+        LogicRequests.write_questions(self.questions)
+
+    def remove_question(self, question_id: str):
+        del self.questions[question_id]
+        LogicRequests.write_questions(self.questions)
 
     @staticmethod
     def read_from_json(path: str):
@@ -26,7 +37,7 @@ class LogicRequests:
         questions = list()
         data = LogicRequests.read_from_json(QUESTIONS)
         for key,val in data.items():
-            questions.append(Questions(key, str(val['text']), list(val['answers']), int(val['correct'])))
+            questions.append(Question(key, str(val['text']), list(val['answers']), int(val['correct'])))
         return questions
     
     @staticmethod

@@ -8,7 +8,7 @@ class UserFacade:
 
     def login(self, id):
         if not self.logic_requests.valid_id(id):
-            return None
+            return 0
         user = self.logic_requests.get_user(id)
         if user is None:
             return 0
@@ -17,14 +17,11 @@ class UserFacade:
         else:
             return 2
 
-    def start_test(self, id, number_of_questions):
-        user = self.logic_requests.get_user(id)
+    def start_test(self, number_of_questions=10):
         test = self.logic_requests.generate_test(number_of_questions)
         return test
 
     def end_test(self, id, selected_answers):
-        if len(selected_answers) != len(self.logic_requests.get_test()):
-            return None
         user = self.logic_requests.get_user(id)
         grade = self.logic_requests.calculate_grade(selected_answers)
         user.update_grade(grade)
@@ -52,8 +49,7 @@ class UserFacade:
         return True
 
     def remove_question(self, question_id):
-        question = self.logic_requests.get_question(question_id)
-        self.logic_requests.remove_question(question)
+        self.logic_requests.remove_question(question_id)
         return True
 
 

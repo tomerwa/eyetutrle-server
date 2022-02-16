@@ -1,7 +1,9 @@
 import json
 from Question import Question
+from User import User
 
 QUESTIONS = '..\\questions.json'
+USERS = '..\\users.json'
 
 class LogicRequests:
 
@@ -53,6 +55,23 @@ class LogicRequests:
             }
         LogicRequests.write_to_json(QUESTIONS, data)
 
+    @staticmethod
+    def read_users():
+        users = list()
+        data = LogicRequests.read_from_json(USERS)
+        for key,val in data.items():
+            users.append(User(key, list(val['grades'])))
+        return users
+    
+    @staticmethod
+    def write_users(users: list):
+        data = dict()
+        for u in users:
+            data[u.id] = {
+                'grades': u.grades
+            }
+        LogicRequests.write_to_json(USERS, data)
+
     def valid_id(self, id):
         if len(id) != 9:
             return False
@@ -60,7 +79,11 @@ class LogicRequests:
                    enumerate(id)) % 10 == 0
 
     def calculate_grade(self, selected_answers):
-        pass
+        grade = 0
+        for ans in selected_answers:
+            if self.questions[selected_answers.id].correct_answer == ans:
+                grade += 1
+        return grade * 100 / len(grade)
 
     def generate_test(self, number_of_questions):
         pass
@@ -69,4 +92,4 @@ class LogicRequests:
         return len(self.questions)
 
     def update_grade(self, user_id, grade):
-        pass
+        self.users[user_id].add_grade(grade)

@@ -1,6 +1,6 @@
 class Question:
 
-    def __init__(self, id, content=None, possible_answers=(), correct_answer=None):
+    def __init__(self, id, content=None, possible_answers=None, correct_answer=None):
         self.id = id
         self.content = content
         self.possible_answers = possible_answers

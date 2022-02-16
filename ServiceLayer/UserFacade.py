@@ -7,7 +7,7 @@ class UserFacade:
         self.logic_requests = LogicRequests()
 
     def login(self, user_id):
-        if not self.logic_requests.valid_id(user_id):
+        if not LogicRequests.valid_id(user_id):
             return 0
         user = self.logic_requests.get_user(user_id)
         if user is None:

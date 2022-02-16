@@ -1,7 +1,12 @@
 import json
-from Question import Question
+import random
+from DomainLayer.Question import *
+from DomainLayer.User import *
+
 
 QUESTIONS = '..\\questions.json'
+USERS = '..\\users.json'
+
 
 class LogicRequests:
 
@@ -38,9 +43,17 @@ class LogicRequests:
     def read_questions():
         questions = list()
         data = LogicRequests.read_from_json(QUESTIONS)
-        for key,val in data.items():
+        for key, val in data.items():
             questions.append(Question(key, str(val['text']), list(val['answers']), int(val['correct'])))
         return questions
+
+    @staticmethod
+    def read_users():
+        users = list()
+        data = LogicRequests.read_from_json(USERS)
+        for key, val in data.items():
+            users.append(User(key, str(val['grades'])))
+        return users
     
     @staticmethod
     def write_questions(questions: list):
@@ -53,17 +66,28 @@ class LogicRequests:
             }
         LogicRequests.write_to_json(QUESTIONS, data)
 
-    def valid_id(self, id):
-        if len(id) != 9:
+    @staticmethod
+    def write_users(users: list):
+        data = dict()
+        for u in users:
+            data[u.id] = {
+                'id': u.id,
+                'grades': u.grades
+            }
+        LogicRequests.write_to_json(USERS, data)
+
+    @staticmethod
+    def valid_id(user_id):
+        if len(user_id) != 9:
             return False
         return sum((int(digit) * (idx % 2 + 1)) % 10 + (int(digit) * (idx % 2 + 1)) / 10 for idx, digit in
-                   enumerate(id)) % 10 == 0
+                   enumerate(user_id)) % 10 == 0
 
     def calculate_grade(self, selected_answers):
         pass
 
     def generate_test(self, number_of_questions):
-        pass
+        return random.sample(self.questions, number_of_questions)
 
     def generate_question_id(self):
         return len(self.questions)

@@ -1,9 +1,7 @@
 class User:
 
-    def __init__(self, id, username=None, password=None, grades=None):
+    def __init__(self, id, grades=None):
         self.id = id
-        self.username = username
-        self.password = password
         self.grades = grades
 
     def calculate_grade(self, correct_answers, total_questions):

@@ -1,4 +1,4 @@
-class Questions:
+class Question:
 
     def __init__(self, id, content=None, possible_answers=(), correct_answer=None):
         self.id = id

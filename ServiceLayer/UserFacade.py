@@ -51,6 +51,12 @@ class UserFacade:
         self.logic_requests.add_question(question)
         return True
 
+    def remove_question(self, question_id):
+        question = self.logic_requests.get_question(question_id)
+        self.logic_requests.remove_question(question)
+        return True
+
+
 
 
 

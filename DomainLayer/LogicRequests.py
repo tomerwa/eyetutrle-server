@@ -4,8 +4,8 @@ from DomainLayer.Question import *
 from DomainLayer.User import *
 
 
-QUESTIONS = '..\\questions.json'
-USERS = '..\\users.json'
+QUESTIONS = 'questions.json'
+USERS = 'users.json'
 
 class LogicRequests:
 
@@ -14,7 +14,10 @@ class LogicRequests:
         self.questions = LogicRequests.read_questions()
 
     def get_user(self, user_id):
-        return self.users[user_id]
+        for usr in self.users:
+            if usr.id == user_id:
+                return usr
+        return None
 
     def add_question(self, question: Question):
         self.questions.append(question)
@@ -22,7 +25,7 @@ class LogicRequests:
         return True
 
     def remove_question(self, question_id: str):
-        del self.questions[question_id]
+        del self.questions[int(question_id)]
         LogicRequests.write_questions(self.questions)
         return True
 
@@ -51,7 +54,7 @@ class LogicRequests:
         users = list()
         data = LogicRequests.read_from_json(USERS)
         for key, val in data.items():
-            users.append(User(key, str(val['grades'])))
+            users.append(User(key, val))
         return users
     
     @staticmethod
@@ -78,21 +81,24 @@ class LogicRequests:
     def valid_id(user_id):
         if len(user_id) != 9:
             return False
-        return sum((int(digit) * (idx % 2 + 1)) % 10 + (int(digit) * (idx % 2 + 1)) / 10 for idx, digit in
-                   enumerate(user_id)) % 10 == 0
+        return True
 
     def calculate_grade(self, selected_answers):
         grade = 0
         for ans in selected_answers:
-            if self.questions[selected_answers.id].correct_answer == ans:
+            if self.questions[int(ans.get('id'))].correct_answer == ans.get('answer'):
                 grade += 1
-        return grade * 100 / len(grade)
+        return grade * 100 / len(selected_answers)
 
     def generate_test(self, number_of_questions):
-        return random.sample(self.questions, number_of_questions)
+        lst = random.sample(self.questions, min(len(self.questions), int(number_of_questions)))
+        res = list()
+        for qst in lst:
+            res.append(qst.toJSON())
+        return res
 
     def generate_question_id(self):
         return len(self.questions)
 
     def update_grade(self, user_id, grade):
-        self.users[user_id].add_grade(grade)
+        self.get_user(user_id).add_grade(grade)

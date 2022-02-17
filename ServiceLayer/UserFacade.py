@@ -20,10 +20,13 @@ class UserFacade:
             return 2
 
     def tts(self, question_id):
-        question = self.logic_requests.questions[question_id]
-        self.api.speak(question.text)
+        question = self.logic_requests.questions[int(question_id)]
+        self.api.speak(question.content)
+        idx = ['א', 'ב', 'ג']
+        cnt = 0
         for ans in question.possible_answers:
-            self.api.speak(ans)
+            self.api.speak('תשובה {} '.format(idx[cnt]) + ans)
+            cnt += 1
 
     def start_test(self, number_of_questions=10):
         return self.logic_requests.generate_test(number_of_questions)
@@ -41,14 +44,14 @@ class UserFacade:
 
     def add_question(self, content, possible_answers, correct_answer):
         if content is None or content == "":
-            return False
-        if possible_answers != 3:
-            return False
+            return 'Content Empty'
+        if len(possible_answers) != 3:
+            return 'Options Not 3'
         for answer in possible_answers:
             if answer is None or answer == "":
-                return False
+                return 'Invalid Options'
         if correct_answer < 0 or correct_answer > 2:
-            return False
+            return 'Invalid Correct Answer'
         question_id = self.logic_requests.generate_question_id()
         question = Question(question_id, content=content, possible_answers=possible_answers, correct_answer=correct_answer)
         return self.logic_requests.add_question(question)

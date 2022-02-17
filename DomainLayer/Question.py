@@ -1,3 +1,6 @@
+import json
+
+
 class Question:
 
     def __init__(self, id, content=None, possible_answers=None, correct_answer=None):
@@ -12,4 +15,10 @@ class Question:
     def remove_possible_answer(self, possible_answer):
         self.possible_answers.remove(possible_answer)
 
-
+    def toJSON(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'possible_answers': self.possible_answers,
+            'correct_answer': self.correct_answer
+        }

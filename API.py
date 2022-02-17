@@ -7,8 +7,9 @@ SLEEP = 1
 
 class API:
     def __init__(self):
-        self.driver = self.start_driver()
+        self.driver = API.start_driver()
 
+    @staticmethod
     def start_driver():
         options = Options()
         options.add_argument('--headless')

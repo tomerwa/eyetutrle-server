@@ -7,5 +7,8 @@ class User:
     def add_grade(self, grade):
         self.grades.append(grade)
 
+    def is_admin(self):
+        return int(self.id) == 212470009
+
     def get_grades(self):
         return self.grades

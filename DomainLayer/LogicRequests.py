@@ -54,7 +54,7 @@ class LogicRequests:
         users = list()
         data = LogicRequests.read_from_json(USERS)
         for key, val in data.items():
-            users.append(User(key, val))
+            users.append(User(key, bool(val['is_admin']), list(val['grades'])))
         return users
     
     @staticmethod
@@ -73,6 +73,7 @@ class LogicRequests:
         data = dict()
         for u in users:
             data[u.id] = {
+                'is_admin': u.is_admin,
                 'grades': u.grades
             }
         LogicRequests.write_to_json(USERS, data)
